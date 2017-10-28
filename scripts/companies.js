@@ -9,7 +9,7 @@ document.addEventListener('mousemove', function (e) {
   var srcElement = e.srcElement;
 
   // Lets check if our underlying element is a DIV.
-  if (srcElement.nodeName == 'DIV') {
+  if (srcElement.childNodes[0].textContent.includes("company")) {
 
     // For NPE checking, we check safely. We need to remove the class name
     // Since we will be styling the new one after.
