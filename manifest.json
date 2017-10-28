@@ -15,10 +15,14 @@
           "run_at": "document_end"
       }
   ],
+  "background": {
+      "scripts": [
+          "scripts/background.js"
+      ]
+  },
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html",
-    "default_title": "Stalk settings"
+    "default_title": "Make this page red"
   },
   "permissions": [
     "tabs",
