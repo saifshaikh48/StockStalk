@@ -42,67 +42,95 @@ function getPopup(id, name, start, close, volume) {
     document.body.appendChild(popup);
 }
 
-// Searches the document for companies and adds them to a list of nodes
-var re = /\bgoogle\b/i;
-var walker = document.createTreeWalker(
-    document.body,
-    NodeFilter.SHOW_TEXT,
-    function (node) {
-        var matches = node.textContent.match(re);
-
-        if (matches) {
-            return NodeFilter.FILTER_ACCEPT;
-        } else {
-            return NodeFilter.FILTER_SKIP;
-        }
-    },
-    false);
-
-var nodes = [];
-
-while (walker.nextNode()) {
-    nodes.push(walker.currentNode);
+function getRegex(list) {
+    var keys = "\\b";
+    for (var key in list) {
+        keys += key + "|";
+    }
+    keys = keys.substr(0, keys.length - 1);
+    keys += "\\b";
+    return new RegExp(keys, "i");
 }
 
-// Gets a time for two days ago to make sure that the data is updated
-var currentTime = new Date();
-var twoPast = new Date();
-twoPast.setTime(currentTime.getTime() - (2 * 24 * 60 * 60 * 1000));
-if (twoPast.getDay == 6)
-    twoPast.setTime(currentTime.getTime() - (1 * 24 * 60 * 60 * 1000));
-else if (twoPast.getDay == 0)
+function loadAll() {
+    var kvp = {
+        "google": { "name": "Google", "symbol": "googl" },
+        "apple": { "name": "Apple", "symbol": "aapl" },
+        "microsoft": { "name": "Microsoft", "symbol": "msft" }
+    };
+
+    // Searches the document for companies and adds them to a list of nodes
+    var re = getRegex(kvp);
+    var walker = document.createTreeWalker(
+        document.body,
+        NodeFilter.SHOW_TEXT,
+        function (node) {
+            var matches = node.textContent.match(re);
+
+            if (matches) {
+                return NodeFilter.FILTER_ACCEPT;
+            } else {
+                return NodeFilter.FILTER_SKIP;
+            }
+        },
+        false
+    );
+
+    var nodes = [];
+
+    while (walker.nextNode()) {
+        nodes.push(walker.currentNode);
+    }
+
+    // Gets a time for two days ago to make sure that the data is updated
+    var currentTime = new Date();
+    var twoPast = new Date();
     twoPast.setTime(currentTime.getTime() - (2 * 24 * 60 * 60 * 1000));
-var dataRef = "Time Series (Daily)";
-var year = twoPast.getFullYear();
-var month = twoPast.getMonth() + 1;
-var date = twoPast.getDate();
-var stringTime = year + "-" + month + "-" + date;
+    if (twoPast.getDay == 6) {
+        twoPast.setTime(currentTime.getTime() - (1 * 24 * 60 * 60 * 1000));
+    } else if (twoPast.getDay == 0) {
+        twoPast.setTime(currentTime.getTime() - (2 * 24 * 60 * 60 * 1000));
+    }
+    var stringTime = twoPast.getFullYear() + "-" + (twoPast.getMonth() + 1) + "-" + twoPast.getDate();
 
-// Iterates through each company and creates a new span and popup to handle that company
-for (var i = 0; node = nodes[i]; i++) {
-    loadData(i, node, stringTime);
-}
+    // Iterates through each company and creates a new span and popup to handle that company
+    for (var i = 0; node = nodes[i]; i++) {
+        loadData(i, node, stringTime);
+    }
 
-function loadData(i, node, time) {
-    var dayData;
-    alpha.data.daily(`googl`).then(data => {
-        dayData = data[dataRef];
+    async function loadData(i, node, time) {
+        // Get the one that matched
+        var name = node.textContent.match(re)[0];
+        var stockData = kvp[name.toLowerCase()];
+        console.log(stockData);
 
-        if (dayData != null) {
-            var id = "elem-" + i;
-            var divId = "pop-" + i;
-            if (node.parentNode != null) {
-                node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>" + node.textContent.match(re) + "</u></span>");
-                var elem = document.getElementById(id);
-                if (elem != null) {
-                    elem.onmouseenter = createOnEnter(divId);
-                    elem.onmouseleave = createOnLeave(divId);
-                    getPopup(divId, "Google",
-                        dayData[stringTime]["1. open"],
-                        dayData[stringTime]["4. close"],
-                        dayData[stringTime]["5. volume"]);
-                }
+        // Load data if it doesn't already exist
+        if (!stockData.hasOwnProperty("data")) {
+            var data = await alpha.data.daily(stockData["symbol"]);
+            if (data != null && data != undefined && data.hasOwnProperty("Time Series (Daily)")) {
+                stockData["data"] = data["Time Series (Daily)"];
+                kvp[name.toLowerCase] = stockData;
+            } else {
+                console.log("Failed fetch");
             }
         }
-    });
+        dayData = stockData["data"][stringTime];
+
+        var id = "elem-" + i;
+        var divId = "pop-" + i;
+        if (node.parentNode != null) {
+            node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>" + name + "</u></span>");
+            var elem = document.getElementById(id);
+            if (elem != null) {
+                elem.onmouseenter = createOnEnter(divId);
+                elem.onmouseleave = createOnLeave(divId);
+                getPopup(divId, stockData["name"],
+                    dayData["1. open"],
+                    dayData["4. close"],
+                    dayData["5. volume"]);
+            }
+        }
+    }
 }
+
+loadAll();
