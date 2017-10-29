@@ -1,13 +1,31 @@
-var uniqueId = function () {
-    return 'id-' + Math.random().toString(36).substr(2, 16);
-};
-
-function onEnter() {
-    console.log("enter...");
+function createOnEnter(id) {
+    return function onEnter(id) {
+        document.getElementById(id).style.display = "block";
+        // console.log("showing " + divId);
+    }
 }
 
-function onLeave() {
-    console.log("leave...");
+function createOnLeave(id) {
+    return function onLeave(id) {
+        document.getElementById(id).style.display = "none";
+        // console.log("hiding " + divId);
+    }
+}
+
+function getPopup(id, x, y) {
+    var popup = document.createElement("div");
+    popup.id = id;
+    popup.style.display = "none";
+    popup.style.width = "100px";
+    popup.style.height = "100px";
+    popup.style.position = "fixed";
+    popup.style.margin = "auto";
+    popup.style.left = 0;
+    popup.style.right = 0;
+    popup.style.top = 0;
+    popup.style.bottom = 0;
+    popup.innerHTML = "Hello world";
+    document.body.appendChild(popup);
 }
 
 var re = /\bcompany\b/i;
@@ -32,13 +50,15 @@ while (walker.nextNode()) {
 }
 
 for (var i = 0; node = nodes[i]; i++) {
-    var id = uniqueId();
+    var id = "elem-" + i;
+    var divId = "pop-" + i;
     if (node.parentNode != null) {
         node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>Blah Blah Blah</u></span>");
+        getPopup(divId);
         var elem = document.getElementById(id);
         if (elem != null) {
-            elem.onmouseenter = onEnter;
-            elem.onmouseleave = onLeave;
+            elem.onmouseenter = createOnEnter(divId);
+            elem.onmouseleave = createOnLeave(divId);
         }
     }
 }
