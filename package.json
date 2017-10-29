@@ -1,6 +1,6 @@
 {
-  "name": "stalk",
-  "version": "1.0.0",
+  "name": "stockstalk",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,15 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JMichaelYang/Stalk.git"
+    "url": "git+https://github.com/JMichaelYang/StockStalk.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JMichaelYang/Stalk/issues"
+    "url": "https://github.com/JMichaelYang/StockStalk/issues"
   },
-  "homepage": "https://github.com/JMichaelYang/Stalk#readme",
+  "homepage": "https://github.com/JMichaelYang/StockStalk#readme",
   "devDependencies": {
     "webpack": "^3.8.1"
   }

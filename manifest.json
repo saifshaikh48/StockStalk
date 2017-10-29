@@ -1,6 +1,6 @@
 {
     "manifest_version": 2,
-    "name": "Stalk",
+    "name": "StockStalk",
     "description": "This extension provides the user access to quick stock information.",
     "version": "0.0.1",
     "content_scripts": [
