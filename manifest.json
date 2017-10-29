@@ -10,10 +10,7 @@
                 "https://*/*"
             ],
             "js": [
-                "scripts/companies.js"
-            ],
-            "css": [
-                "css/companies.css"
+                "scripts/content.js"
             ],
             "run_at": "document_idle"
         }
