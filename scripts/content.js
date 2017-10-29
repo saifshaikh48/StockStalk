@@ -70199,18 +70199,9 @@ function createOnLeave(id) {
 // Creates a popup to display when a company is hovered over
 function getPopup(id, name, start, close, volume) {
     var popup = document.createElement("div");
-    var pStyle = "style=\"margin-left:15px;\"";
+    var pStyle = "style=\"margin-left:15px;\" !important";
     popup.id = id;
-    popup.style.display = "none";
-    popup.style.zIndex = "9999";
-    popup.style.width = "180px";
-    popup.style.height = "180px";
-    popup.style.position = "fixed";
-
-    popup.style.background = "#DDDDDD";
-    popup.style.color = "#579EED";
-    popup.style.border = "1px solid #4D4F53";
-    popup.style.boxShadow = "0px 0px 5px 0px rgba(164, 164, 164, 1)";
+    popup.className = "popbox";
 
     popup.innerHTML = "<h2 " + pStyle + ">Stock Stalk®️</h2>\
         <p " + pStyle + ">Company Name: " + name + "</p>\
@@ -70233,9 +70224,42 @@ function getRegex(list) {
 
 function loadAll() {
     var kvp = {
-        "google": { "name": "Google", "symbol": "googl" },
+        "walmart": { "name": "Walmart", "symbol": "wmt" },
+        "berkshire hathaway": { "name": "Berkshire Hathaway", "symbol": "brk.a" },
         "apple": { "name": "Apple", "symbol": "aapl" },
-        "microsoft": { "name": "Microsoft", "symbol": "msft" }
+        "exxon mobil": { "name": "Exxon Mobil", "symbol": "xon" },
+        "unitedhealth": { "name": "UnitedHealth", "symbol": "unh" },
+        "cvs": { "name": "CVS", "symbol": "cvs" },
+        "general motors": { "name": "General Motors", "symbol": "gm" },
+        "at&t": { "name": "AT&T", "symbol": "t" },
+        "ford motor": { "name": "Ford Motor", "symbol": "f" },
+        "amazon": { "name": "Amazon", "symbol": "amzn" },
+        "general electric": { "name": "General Electric", "symbol": "ge" },
+        "verizon": { "name": "Verizon", "symbol": "vz" },
+        "costco": { "name": "Costco", "symbol": "cost" },
+        "walgreens": { "name": "Walgreens", "symbol": "wba" },
+        "jp morgan": { "name": "JP Morgan", "symbol": "jpm" },
+        "home depot": { "name": "Home Depot", "symbol": "hd" },
+        "priceline": { "name": "Priceline", "symbol": "pcln" },
+        "chevron": { "name": "Chevron", "symbol": "cvx" },
+        "boeing": { "name": "Boeing", "symbol": "ba" },
+        "wells fargo": { "name": "Wells Fargo", "symbol": "wfc" },
+        "bank of america": { "name": "Bank of America", "symbol": "bac" },
+        "google": { "name": "Google", "symbol": "googl" },
+        "microsoft": { "name": "Microsoft", "symbol": "msft" },
+        "comcast": { "name": "Comcast", "symbol": "cmcsa" },
+        "ibm": { "name": "IBM", "symbol": "ibm" },
+        "johnson & johnson": { "name": "Johnson & Johnson", "symbol": "jnj" },
+        "proctor & gamble": { "name": "Proctor & Gamble", "symbol": "pg" },
+        "valero": { "name": "Valero", "symbol": "vol" },
+        "lowe's": { "name": "Lowe's", "symbol": "low" },
+        "dell": { "name": "Dell", "symbol": "dvmt" },
+        "pepsi": { "name": "Pepsi", "symbol": "pep" },
+        "intel": { "name": "Intel", "symbol": "intc" },
+        "prudential financial": { "name": "Prudential Financial", "symbol": "pru" },
+        "disney": { "name": "Disney", "symbol": "dis" },
+        "yahoo": { "name": "Yahoo", "symbol": "yhoo" },
+        "nike": { "name": "Nike", "symbol": "nke" }
     };
 
     // Searches the document for companies and adds them to a list of nodes
