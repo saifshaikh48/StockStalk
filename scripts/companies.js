@@ -1,17 +1,18 @@
+// Creates a function to handle the displaying of a popup
 function createOnEnter(id) {
-    return function onEnter(id) {
+    return function onEnter() {
         document.getElementById(id).style.display = "block";
-        // console.log("showing " + divId);
     }
 }
 
+// Creates a function to handle the hiding of a popup
 function createOnLeave(id) {
-    return function onLeave(id) {
+    return function onLeave() {
         document.getElementById(id).style.display = "none";
-        // console.log("hiding " + divId);
     }
 }
 
+// Creates a popup to display when a company is hovered over
 function getPopup(id, x, y) {
     var popup = document.createElement("div");
     popup.id = id;
@@ -28,6 +29,7 @@ function getPopup(id, x, y) {
     document.body.appendChild(popup);
 }
 
+// Searches the document for companies and adds them to a list of nodes
 var re = /\bcompany\b/i;
 var walker = document.createTreeWalker(
     document.body,
@@ -49,6 +51,7 @@ while (walker.nextNode()) {
     nodes.push(walker.currentNode);
 }
 
+// Iterates through each company and creates a new span and popup to handle that company
 for (var i = 0; node = nodes[i]; i++) {
     var id = "elem-" + i;
     var divId = "pop-" + i;
