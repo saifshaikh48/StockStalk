@@ -1,8 +1,16 @@
-// Unique ID for the className.
-var MOUSE_VISITED_CLASSNAME = 'crx_mouse_visited';
+var uniqueId = function () {
+    return 'id-' + Math.random().toString(36).substr(2, 16);
+};
 
-var re = /company/i;
-var company = "Test"
+function onEnter() {
+    console.log("enter...");
+}
+
+function onLeave() {
+    console.log("leave...");
+}
+
+var re = /\bcompany\b/i;
 var walker = document.createTreeWalker(
     document.body,
     NodeFilter.SHOW_TEXT,
@@ -24,8 +32,13 @@ while (walker.nextNode()) {
 }
 
 for (var i = 0; node = nodes[i]; i++) {
-    node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<u>" + company + "</u>")
+    var id = uniqueId();
+    if (node.parentNode != null) {
+        node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>Blah Blah Blah</u></span>");
+        var elem = document.getElementById(id);
+        if (elem != null) {
+            elem.onmouseenter = onEnter;
+            elem.onmouseleave = onLeave;
+        }
+    }
 }
-
-// Node -> Node
-// replaces a substring of the Node with another Node
