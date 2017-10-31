@@ -149,12 +149,17 @@ document.write(string);
     var currentTime = new Date();
     var twoPast = new Date();
     twoPast.setTime(currentTime.getTime() - (2 * 24 * 60 * 60 * 1000));
-    if (twoPast.getDay == 6) {
-        twoPast.setTime(currentTime.getTime() - (1 * 24 * 60 * 60 * 1000));
-    } else if (twoPast.getDay == 0) {
-        twoPast.setTime(currentTime.getTime() - (2 * 24 * 60 * 60 * 1000));
+    console.log("Time set to: " + twoPast);
+    console.log("Day is: " + twoPast.getDay())
+
+    if (twoPast.getDay() == 6) {
+        twoPast.setTime(twoPast.getTime() - (1 * 24 * 60 * 60 * 1000));
+    } else if (twoPast.getDay() == 0) {
+        twoPast.setTime(twoPast.getTime() - (2 * 24 * 60 * 60 * 1000));
     }
     var stringTime = twoPast.getFullYear() + "-" + (twoPast.getMonth() + 1) + "-" + twoPast.getDate();
+
+    console.log("Fetching data for: " + stringTime);
 
     // Iterates through each company and creates a new span and popup to handle that company
     for (var i = 0; node = nodes[i]; i++) {
