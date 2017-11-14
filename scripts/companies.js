@@ -28,9 +28,9 @@ function getPopup(id, name, symbol, start, close, volume) {
         <p " + pStyle + ">Company Name: " + name + "</p>\
         <p " + pStyle + ">Company Symbol: " + symbol.toUpperCase() + "</p>\
         <hr>\
-        <p " + pStyle + ">Closing Price: " + close + "</p>\
-        <p " + pStyle + ">Starting Price: " + start + "</p>\
-        <p " + pStyle + ">Trade Volume: " + volume + "</p>";
+        <p " + pStyle + ">Closing Price: $" + close + "</p>\
+        <p " + pStyle + ">Starting Price: $" + start + "</p>\
+        <p " + pStyle + ">Trade Volume: " + volume + " shares" + "</p>";
 
     document.body.appendChild(popup);
 }
