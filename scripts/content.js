@@ -37679,6 +37679,7 @@ var alpha = require("alphavantage")({ key: "II2KSRA2K8NWVJHU" });
 // Creates a function to handle the displaying of a popup
 function createOnEnter(id) {
     return function onEnter(e) {
+      console.log("entered")
         var popup = document.getElementById(id);
         popup.style.left = e.clientX + 20 + "px";
         popup.style.top = e.clientY + 20 + "px";
@@ -37689,6 +37690,7 @@ function createOnEnter(id) {
 // Creates a function to handle the hiding of a popup
 function createOnLeave(id) {
     return function onLeave() {
+      console.log("exited")
         document.getElementById(id).style.display = "none";
     }
 }
@@ -37833,7 +37835,7 @@ document.write(string);
     } else if (twoPast.getDay() == 0) {
         twoPast.setTime(twoPast.getTime() - (2 * 24 * 60 * 60 * 1000));
     }
-    var stringTime = twoPast.getFullYear() + "-" + (twoPast.getMonth() + 1) + "-" + twoPast.getDate();
+    var stringTime = twoPast.getFullYear() + "-" + ('0' + twoPast.getMonth()).slice(-2) + "-" + twoPast.getDate();
 
     console.log("Fetching data for: " + stringTime);
 
@@ -37858,22 +37860,46 @@ document.write(string);
                 console.log("Failed fetch");
             }
         }
-        dayData = stockData["data"][stringTime];
+        
+        const ordered = Object.keys(stockData.data).sort().reduce(
+          (obj, key) => { 
+            obj[key] = stockData.data[key]; 
+            return obj;
+          }, 
+          {}
+        );
+        dataList = [];
+        for (const [key, value] of Object.entries(ordered)) {
+          dataList.push(value)
+        }
+        dataList.sort();
+        dayData = dataList[dataList.length-1]; //stockData["data"][stringTime]
+        console.log(dayData);
+        console.log(stockData["data"][stringTime]);
 
         var id = "elem-" + i;
         var divId = "pop-" + i;
         if (node.parentNode != null) {
-            node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>" + name + "</u></span>");
-            var elem = document.getElementById(id);
-            if (elem != null) {
-                elem.onmouseenter = createOnEnter(divId);
-                elem.onmouseleave = createOnLeave(divId);
-                getPopup(divId, stockData["name"],
-                    stockData["symbol"],
-                    dayData["1. open"],
-                    dayData["4. close"],
-                    dayData["5. volume"]);
-            }
+          console.log("parent node found")
+          console.log(node.parentNode);
+
+          node.parentNode.innerHTML = node.parentNode.innerHTML.replace(re, "<span id=" + id + "><u>" + name + "</u></span>");
+          var elem = document.getElementById(id);
+          console.log(elem)
+          if (elem != null) {
+            console.log("elem found")
+
+            elem.onmouseenter = createOnEnter(divId);
+            elem.onmouseleave = createOnLeave(divId);
+            getPopup(divId, stockData["name"],
+                stockData["symbol"],
+                dayData["1. open"],
+                dayData["4. close"],
+                dayData["5. volume"]);
+          }
+        }
+        else {
+          console.log("Could not create pop up")
         }
     }
 }
